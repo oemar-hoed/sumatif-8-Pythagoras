@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumatif Teorema Pythagoras Kelas 8</title>
+    
+    <!-- Konfigurasi MathJax v3 agar mendukung simbol $ untuk inline math -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Library html2canvas untuk mengubah hasil jadi JPG -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; user-select: none; }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; }
+        
+        /* Halaman Login */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        
+        button { background-color: #0d6efd; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #0b5ed7; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        
+        /* Halaman Ujian */
+        #exam-page { display: none; }
+        .exam-header { display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; }
+        .question-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 13px; font-weight: bold; margin-bottom: 15px; background: #e7f1ff; color: #0d6efd; border: 1px solid #b6d4fe; }
+        .question-text { 
+            font-family: 'Cambria', Georgia, serif; 
+            font-size: 22px; 
+            margin-bottom: 20px; 
+            line-height: 1.6; 
+        }
+        .opsi-label { 
+            font-family: 'Cambria', Georgia, serif; 
+            font-size: 19px; 
+            display: block; 
+            padding: 12px 15px; 
+            border: 1px solid #ddd; 
+            margin-bottom: 10px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+        }
+        .opsi-label:hover { background: #f8f9fa; border-color: #0d6efd; }
+        
+        /* Panel Navigasi */
+        .nav-panel { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 10px; margin-top: 10px; }
+        .nav-btn { width: 100%; padding: 10px 0; border-radius: 5px; border: 1px solid #ccc; background: white; color: black; cursor: pointer; text-align: center; font-weight: bold; }
+        .nav-btn.answered { background: #198754; color: white; border-color: #198754; }
+        .nav-btn.active { border: 3px solid #ffc107; box-shadow: 0 0 5px rgba(255,193,7,0.5); }
+        
+        /* Navigasi Bawah */
+        .controls { display: flex; justify-content: space-between; margin-top: 20px; }
+        
+        /* Red Screen Pelanggaran */
+        #cheat-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #dc3545; color: white; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        #cheat-screen h1 { font-size: 42px; margin-bottom: 10px; }
+        
+        /* Halaman Hasil */
+        #result-page { display: none; text-align: center; }
+        .score-display { font-size: 60px; font-weight: bold; color: #198754; margin: 20px 0; }
+        .action-btns { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
+        .btn-wa { background-color: #25D366; }
+        .btn-wa:hover { background-color: #1ebe5d; }
+        .btn-jpg { background-color: #dc3545; }
+        .btn-jpg:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+
+    <!-- RED SCREEN ANTI CHEAT -->
+    <div id="cheat-screen">
+        <h1>🚨 PELANGGARAN TERDETEKSI! 🚨</h1>
+        <p style="font-size: 22px;">Anda terdeteksi keluar layar, beralih tab, atau menekan tombol terlarang!</p>
+        <p style="font-size: 18px;">Tindakan ini dicatat oleh sistem.</p>
+        <button onclick="stopSirenAndResume()" style="margin-top: 30px; background: white; color: #dc3545; padding: 12px 25px;">Kembali ke Ujian</button>
+    </div>
+
+    <!-- HALAMAN LOGIN -->
+    <div id="login-page" class="container">
+        <div class="card">
+            <h2 style="text-align: center; color: #0d6efd;">Sumatif Teorema Pythagoras Kelas 8</h2>
+            <p style="text-align: center; color: #666;">Silakan isi identitas Anda untuk memulai ujian CBT.</p>
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="siswa-nama" placeholder="Masukkan nama menggunakan huruf kapital..." required>
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" id="siswa-kelas" placeholder="Misal: 8K" required>
+            </div>
+            <div class="form-group">
+                <label>No. Absen</label>
+                <input type="number" id="siswa-absen" placeholder="Misal: 03" required>
+            </div>
+            <button onclick="mulaiUjian()" style="width: 100%; margin-top: 15px;">Mulai Ujian</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN UJIAN -->
+    <div id="exam-page" class="container">
+        <div class="card">
+            <div class="exam-header">
+                <span id="info-siswa">Nama - Kelas</span>
+                <span id="info-timer" style="color: #dc3545; font-size: 20px;">⏳ 00:00:00</span>
+                <span id="info-soal">Soal 1/20</span>
+            </div>
+            
+            <div id="question-container">
+                <!-- Soal akan dirender di sini secara dinamis -->
+            </div>
+
+            <div class="controls">
+                <button id="btn-prev" onclick="gantiSoal(-1)">⬅ Sebelumnya</button>
+                <button id="btn-next" onclick="gantiSoal(1)">Selanjutnya ➡</button>
+                <button id="btn-finish" onclick="selesaiUjian()" style="display: none; background: #198754;">Selesai & Kumpulkan</button>
+            </div>
+
+            <div class="nav-panel">
+                <h4 style="margin-bottom: 10px;">Panel Nomor Soal</h4>
+                <div class="nav-grid" id="nav-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN HASIL (RESULT) -->
+    <div id="result-page" class="container">
+        <div class="card" id="cetak-area" style="background-color: #121212; color: #ffffff; padding: 40px; border-radius: 12px; border: 4px solid #2c3e50;">
+            <h2 style="font-size: 32px; color: #f1c40f; margin-bottom: 5px;">🎓 BUKTI UJIAN SELESAI 🎓</h2>
+            <p style="font-size: 18px; color: #aab7b8; margin-top: 0; margin-bottom: 20px;">Sumatif Teorema Pythagoras Kelas 8</p>
+            <hr style="border: 1px solid #34495e; margin-bottom: 25px;">
+            
+            <div style="text-align: left; font-size: 22px; line-height: 2.2;">
+                <p style="margin: 5px 0;">👤 <strong>Nama:</strong> <span id="res-nama" style="color: #ecf0f1;"></span></p>
+                <p style="margin: 5px 0;">🏫 <strong>Kelas:</strong> <span id="res-kelas" style="color: #ecf0f1;"></span></p>
+                <p style="margin: 5px 0;">🔢 <strong>No. Absen:</strong> <span id="res-absen" style="color: #ecf0f1;"></span></p>
+                <p style="margin: 5px 0;">⚠️ <strong>Pelanggaran:</strong> <span id="res-pelanggaran" style="color:#ff4d4d; font-weight:bold;">0</span> kali</p>
+            </div>
+            
+            <div style="margin-top: 35px; margin-bottom: 25px;">
+                <div style="font-size: 20px; color: #bdc3c7; margin-bottom: -10px;">Skor Otomatis (PG, PGK, Benar-Salah)</div>
+                <div style="font-size: 90px; font-weight: bold; color: #2ecc71; text-shadow: 0px 0px 20px rgba(46, 204, 113, 0.4);">
+                    <span id="res-skor">0</span>
+                </div>
+            </div>
+            
+            <p style="color: #7f8c8d; font-size: 16px; font-style: italic; margin-top: 20px;">📝 *Nilai soal uraian akan dikoreksi secara manual oleh Guru.</p>
+        </div>
+        
+        <div class="action-btns">
+            <button class="btn-wa" onclick="kirimWhatsApp()">Kirim ke WhatsApp Guru</button>
+            <button class="btn-jpg" onclick="downloadJPG()">Simpan sebagai Gambar JPEG</button>
+        </div>
+    </div>
+
+    <!-- IMPORT EXTERNAL DATABASE SOAL -->
+    <script src="soal.js"></script>
+
+    <!-- SCRIPT UTAMA SISTEM UJIAN -->
+    <script>
+        // ==========================================
+        // VARIABEL STATE SISTEM
+        // ==========================================
+        let studentData = {};
+        let examQuestions = [];
+        let currentIndex = 0;
+        let answers = {}; 
+        let violations = 0;
+        let isExamActive = false;
+        let logPelanggaranData = []; 
+        
+        // Timer Ujian (3600 detik = 60 menit)
+        let timerInterval;
+        let waktuUjian = 4801; 
+        
+        // BOBOT SKOR MASING-MASING TIPE SOAL
+        const SKOR_PG = 3;       // Skor 1 soal PG Tunggal
+        const SKOR_PGK = 4;      // Skor 1 soal PG Kompleks
+        const SKOR_BS = 3;       // Skor 1 soal PG Benar-Salah
+
+        // Nomor WhatsApp Pengawas / Guru 
+        const WA_GURU = "6281231239331"; 
+
+        // Audio Context untuk Sirine Anti-Cheat
+        let audioCtx;
+        let sirenOscillator;
+        let sirenInterval;
+        let isSirenPlaying = false; 
+
+        // ==========================================
+        // FUNGSI TIMER
+        // ==========================================
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                waktuUjian--;
+                
+                let jam = Math.floor(waktuUjian / 3600);
+                let menit = Math.floor((waktuUjian % 3600) / 60);
+                let detik = waktuUjian % 60;
+                
+                jam = jam < 10 ? "0" + jam : jam;
+                menit = menit < 10 ? "0" + menit : menit;
+                detik = detik < 10 ? "0" + detik : detik;
+                
+                document.getElementById('info-timer').innerText = `⏳ ${jam}:${menit}:${detik}`;
+                
+                if (waktuUjian <= 0) {
+                    clearInterval(timerInterval);
+                    alert("⏳ WAKTU HABIS! Ujian Anda akan dikumpulkan secara otomatis oleh sistem.");
+                    selesaiUjian(true); 
+                }
+            }, 1000); 
+        }
+
+        // ==========================================
+        // FUNGSI PENGACAKAN (FISHER-YATES SHUFFLE)
+        // ==========================================
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // ==========================================
+        // INISIALISASI UJIAN
+        // ==========================================
+        function mulaiUjian() {
+            if (typeof bankSoal === 'undefined' || !Array.isArray(bankSoal) || bankSoal.length === 0) {
+                alert("Gagal memuat soal! Pastikan file 'soal.js' sudah ada dan berisi array 'bankSoal'.");
+                return;
+            }
+
+            const nama = document.getElementById('siswa-nama').value;
+            const kelas = document.getElementById('siswa-kelas').value;
+            const absen = document.getElementById('siswa-absen').value;
+
+            if(!nama || !kelas || !absen) {
+                alert("Harap lengkapi semua identitas!");
+                return;
+            }
+
+            studentData = { nama, kelas, absen };
+            document.getElementById('info-siswa').innerText = `${nama} - ${kelas} (${absen})`;
+
+            // Mengelompokkan berdasarkan tipe soal dari file soal.js
+            let pgTunggal = bankSoal.filter(q => q.tipe === 'pg_tunggal');
+            let pgKompleks = bankSoal.filter(q => q.tipe === 'pg_kompleks');
+            let pgBenarSalah = bankSoal.filter(q => q.tipe === 'pg_benar_salah');
+            let uraian = bankSoal.filter(q => q.tipe === 'uraian');
+
+            // Pengacakan urutan soal per kategori
+            pgTunggal = shuffleArray(pgTunggal);
+            pgKompleks = shuffleArray(pgKompleks);
+            pgBenarSalah = shuffleArray(pgBenarSalah);
+            uraian = shuffleArray(uraian);
+
+            // Pengacakan pilihan jawaban PG Tunggal
+            pgTunggal.forEach(q => {
+                let optionsWithFlag = q.opsi.map((teks, i) => ({ teks: teks, isCorrect: i === q.jawabanBenar }));
+                q.opsiAcak = shuffleArray(optionsWithFlag);
+            });
+
+            // Pengacakan pilihan jawaban PG Kompleks
+            pgKompleks.forEach(q => {
+                q.opsiAcak = shuffleArray(q.opsi); 
+            });
+
+            // Format opsi PG Benar Salah
+            pgBenarSalah.forEach(q => {
+                q.opsiAcak = q.opsi.map((teks, i) => ({ teks: teks, isCorrect: i === q.jawabanBenar }));
+            });
+
+            // Gabungkan urutan bank soal yang siap diujikan
+            examQuestions = [...pgTunggal, ...pgKompleks, ...pgBenarSalah, ...uraian];
+
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('exam-page').style.display = 'block';
+            
+            try { document.documentElement.requestFullscreen(); } catch(e) {}
+            
+            isExamActive = true;
+            renderNavPanel();
+            renderQuestion();
+            startTimer();
+        }
+
+        // ==========================================
+        // RENDER SOAL & DINAMISASI PER TIPE
+        // ==========================================
+        function renderQuestion() {
+            const q = examQuestions[currentIndex];
+            const container = document.getElementById('question-container');
+            
+            document.getElementById('info-soal').innerText = `Soal ${currentIndex + 1} dari ${examQuestions.length}`;
+            
+            let labelText = q.label || "Soal Ujian";
+            let html = `
+                <div class="question-badge">${labelText}</div>
+                <div class="question-text">${q.pertanyaan}</div>
+            `;
+
+            // TIPE 1: PILIHAN GANDA TUNGGAL
+            if (q.tipe === 'pg_tunggal') {
+                q.opsiAcak.forEach((opt, idx) => {
+                    let isChecked = (answers[q.id] !== undefined && answers[q.id] === idx) ? "checked" : "";
+                    html += `
+                    <label class="opsi-label">
+                        <input type="radio" name="soal_${q.id}" value="${idx}" onchange="simpanJawaban('${q.id}', '${q.tipe}')" ${isChecked}> 
+                        ${opt.teks}
+                    </label>`;
+                });
+            } 
+            // TIPE 2: PILIHAN GANDA KOMPLEKS (Bisa > 1 jawaban)
+            else if (q.tipe === 'pg_kompleks') {
+                html += `<p style="color:#666; font-size:14px; margin-bottom:15px;"><i>*Pilihlah semua pernyataan yang benar (Jawaban bisa lebih dari satu)</i></p>`;
+                q.opsiAcak.forEach((opt, idx) => {
+                    let isChecked = (answers[q.id] && answers[q.id].includes(opt.teks)) ? "checked" : "";
+                    html += `
+                    <label class="opsi-label">
+                        <input type="checkbox" name="soal_${q.id}" value="${opt.benar}" data-teks="${opt.teks}" onchange="simpanJawaban('${q.id}', '${q.tipe}')" ${isChecked}> 
+                        ${opt.teks}
+                    </label>`;
+                });
+            }
+            // TIPE 3: PILIHAN GANDA BENAR - SALAH
+            else if (q.tipe === 'pg_benar_salah') {
+                html += `<p style="color:#666; font-size:14px; margin-bottom:15px;"><i>*Pilihlah salah satu jawaban BENAR atau SALAH untuk pernyataan di atas</i></p>`;
+                q.opsiAcak.forEach((opt, idx) => {
+                    let isChecked = (answers[q.id] !== undefined && answers[q.id] === idx) ? "checked" : "";
+                    html += `
+                    <label class="opsi-label" style="display:flex; align-items:center; gap:10px;">
+                        <input type="radio" name="soal_${q.id}" value="${idx}" onchange="simpanJawaban('${q.id}', '${q.tipe}')" ${isChecked}> 
+                        <strong>${opt.teks}</strong>
+                    </label>`;
+                });
+            }
+            // TIPE 4: SOAL URAIAN (ESSAY)
+            else if (q.tipe === 'uraian') {
+                html += `
+                <div style="background:#e9ecef; padding:18px; border-radius:8px; margin-top:15px; border-left: 4px solid #0d6efd;">
+                    <strong style="color: #0d6efd;">Petunjuk Uraian:</strong><br>
+                    <i>Kerjakan langkah-langkah penyelesaian soal uraian ini secara lengkap pada lembar kertas jawaban yang telah disediakan oleh pengawas.</i>
+                </div>`;
+                answers[q.id] = "dikerjakan_di_kertas";
+                renderNavPanel();
+            }
+
+            container.innerHTML = html;
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+
+            document.getElementById('btn-prev').disabled = currentIndex === 0;
+            
+            if (currentIndex === examQuestions.length - 1) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-finish').style.display = 'inline-block';
+            } else {
+                document.getElementById('btn-next').style.display = 'inline-block';
+                document.getElementById('btn-finish').style.display = 'none';
+            }
+
+            updateNavActive();
+        }
+
+        function gantiSoal(arah) {
+            currentIndex += arah;
+            renderQuestion();
+        }
+
+        function simpanJawaban(soalId, tipe) {
+            if (tipe === 'pg_tunggal' || tipe === 'pg_benar_salah') {
+                const checked = document.querySelector(`input[name="soal_${soalId}"]:checked`);
+                if(checked) {
+                    answers[soalId] = parseInt(checked.value);
+                }
+            } 
+            else if (tipe === 'pg_kompleks') {
+                const checks = document.querySelectorAll(`input[name="soal_${soalId}"]`);
+                let selectedTeks = [];
+                let isPerfect = true;
+                
+                checks.forEach(chk => {
+                    if (chk.checked) selectedTeks.push(chk.getAttribute('data-teks'));
+                    if ((chk.checked && chk.value === "false") || (!chk.checked && chk.value === "true")) {
+                        isPerfect = false;
+                    }
+                });
+
+                if (selectedTeks.length > 0) {
+                    answers[soalId] = selectedTeks; 
+                    answers[soalId + "_score"] = isPerfect; 
+                } else {
+                    delete answers[soalId]; 
+                }
+            }
+            renderNavPanel();
+        }
+
+        // ==========================================
+        // PANEL NAVIGASI (KOTAK NOMOR)
+        // ==========================================
+        function renderNavPanel() {
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = '';
+            
+            examQuestions.forEach((q, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'nav-btn';
+                btn.innerText = idx + 1;
+                
+                if (answers[q.id] !== undefined) {
+                    btn.classList.add('answered');
+                }
+                
+                btn.onclick = () => {
+                    currentIndex = idx;
+                    renderQuestion();
+                };
+                grid.appendChild(btn);
+            });
+            updateNavActive();
+        }
+
+        function updateNavActive() {
+            const btns = document.querySelectorAll('.nav-btn');
+            btns.forEach((btn, idx) => {
+                if (idx === currentIndex) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+
+        // ==========================================
+        // PERHITUNGAN SKOR & SELESAI UJIAN
+        // ==========================================
+        function selesaiUjian(isAuto = false) {
+            if (isAuto || confirm("Apakah Anda yakin ingin menyelesaikan ujian? Anda tidak bisa kembali setelah ini.")) {
+                isExamActive = false;
+                if(timerInterval) clearInterval(timerInterval); 
+                
+                if(document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+
+                let totalSkor = 0;
+
+                examQuestions.forEach(q => {
+                    if (q.tipe === 'pg_tunggal') {
+                        const selectedIdx = answers[q.id];
+                        if (selectedIdx !== undefined && q.opsiAcak[selectedIdx].isCorrect === true) {
+                            totalSkor += SKOR_PG;
+                        }
+                    } 
+                    else if (q.tipe === 'pg_kompleks') {
+                        if (answers[q.id + "_score"] === true) {
+                            totalSkor += SKOR_PGK;
+                        }
+                    }
+                    else if (q.tipe === 'pg_benar_salah') {
+                        const selectedIdx = answers[q.id];
+                        if (selectedIdx !== undefined && q.opsiAcak[selectedIdx].isCorrect === true) {
+                            totalSkor += SKOR_BS;
+                        }
+                    }
+                });
+
+                // INTEGRASI LAPORAN GOOGLE SPREADSHEET
+                const scriptURL = 'https://script.google.com/macros/s/AKfycbwsLABGV1TEeyv_DY8Afdm4PwAy24N1VK1XlpI-c_OHk4msiGQ2qmIFACxjgFPF2dNBJQ/exec';
+                
+                const formData = new FormData();
+                formData.append('nama', studentData.nama);
+                formData.append('kelas', studentData.kelas);
+                formData.append('absen', studentData.absen);
+                formData.append('skor', totalSkor);
+                formData.append('pelanggaran', violations);
+                formData.append('log_pelanggaran', JSON.stringify(logPelanggaranData)); 
+
+                fetch(scriptURL, { method: 'POST', body: formData })
+                    .then(response => console.log('Data berhasil masuk ke Spreadsheet!'))
+                    .catch(error => console.error('Gagal mengirim ke Spreadsheet', error.message));
+
+                document.getElementById('exam-page').style.display = 'none';
+                document.getElementById('result-page').style.display = 'block';
+
+                document.getElementById('res-nama').innerText = studentData.nama;
+                document.getElementById('res-kelas').innerText = studentData.kelas;
+                document.getElementById('res-absen').innerText = studentData.absen;
+                document.getElementById('res-pelanggaran').innerText = violations;
+                document.getElementById('res-skor').innerText = totalSkor;
+            }
+        }
+
+        // ==========================================
+        // FITUR EXPORT (WHATSAPP & JPG)
+        // ==========================================
+        function kirimWhatsApp() {
+            const skor = document.getElementById('res-skor').innerText;
+            
+            let teksPelanggaran = `✅ *Pelanggaran:* 0 (Aman)`;
+            if (violations > 0) {
+                teksPelanggaran = `⚠️ *Pelanggaran:* ${violations} kali%0A❗️ _(Catatan: Terdapat riwayat pelanggaran sistem! Bersiap untuk kemungkinan pengurangan skor akhir dari guru sebagai sanksi.)_`;
+            }
+
+            const pesan = `🎓 *HASIL SUMATIF MATEMATIKA* 🎓%0A%0A👤 Nama: ${studentData.nama}%0A🏫 Kelas: ${studentData.kelas}%0A🔢 No. Absen: ${studentData.absen}%0A%0A*📊 Skor Otomatis (PG/PGK/BS): ${skor}*%0A${teksPelanggaran}%0A%0A📝 _*) Nilai soal uraian belum termasuk (dikoreksi manual)_`;
+            
+            window.open(`https://wa.me/${WA_GURU}?text=${pesan}`, '_blank');
+        }
+
+        function downloadJPG() {
+            const area = document.getElementById('cetak-area');
+            html2canvas(area).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Hasil_Ujian_${studentData.nama}_${studentData.kelas}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg');
+                link.click();
+            });
+        }
+
+        // ==========================================
+        // SISTEM ANTI CHEAT & SIRINE
+        // ==========================================
+        function triggerCheat(jenisPelanggaran) {
+            if(!isExamActive) return;
+            
+            violations++;
+            
+            let now = new Date();
+            let waktuStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
+            
+            logPelanggaranData.push({
+                waktu: waktuStr,
+                jenis: jenisPelanggaran
+            });
+
+            document.getElementById('cheat-screen').style.display = 'flex';
+            
+            if (isSirenPlaying) return; 
+            isSirenPlaying = true;
+            
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            sirenOscillator = audioCtx.createOscillator();
+            sirenOscillator.type = 'square';
+            sirenOscillator.connect(audioCtx.destination);
+            sirenOscillator.start();
+            
+            let highPitch = true;
+            sirenInterval = setInterval(() => {
+                if (sirenOscillator) {
+                    sirenOscillator.frequency.setValueAtTime(highPitch ? 800 : 400, audioCtx.currentTime);
+                    highPitch = !highPitch;
+                }
+            }, 400);
+        }
+
+        function stopSirenAndResume() {
+            document.getElementById('cheat-screen').style.display = 'none';
+            if (sirenInterval) { clearInterval(sirenInterval); sirenInterval = null; }
+            if (sirenOscillator) {
+                try { sirenOscillator.stop(); sirenOscillator.disconnect(); } catch(e) {}
+                sirenOscillator = null;
+            }
+            isSirenPlaying = false; 
+            try { document.documentElement.requestFullscreen(); } catch(e) {}
+        }
+
+        // DETEKSI PELANGGARAN SISTEM
+        window.addEventListener("blur", () => { if(isExamActive) triggerCheat("Kehilangan Fokus / Buka Aplikasi Lain"); });
+        document.addEventListener("visibilitychange", () => { if(document.hidden && isExamActive) triggerCheat("Pindah Tab Browser"); });
+        
+        document.addEventListener("fullscreenchange", () => {
+            if (!document.fullscreenElement && isExamActive) triggerCheat("Keluar Mode Fullscreen (Esc)");
+        });
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => { e.preventDefault(); if(isExamActive) triggerCheat("Mencoba Copy (Ctrl+C)"); });
+        document.addEventListener('paste', e => e.preventDefault());
+
+        document.addEventListener('keyup', (e) => {
+            if(e.key === "PrintScreen" && isExamActive) triggerCheat("Screenshot (PrintScreen)");
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12') { e.preventDefault(); if(isExamActive) triggerCheat("Inspect Element (F12)"); }
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); if(isExamActive) triggerCheat("Inspect Element (Ctrl+Shift+I)"); }
+            if (e.ctrlKey && e.key === 'u') { e.preventDefault(); if(isExamActive) triggerCheat("Lihat Source Code (Ctrl+U)"); }
+        });
+    </script>
+</body>
+</html>
