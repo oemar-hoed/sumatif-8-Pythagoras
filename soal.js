@@ -152,7 +152,7 @@ const bankSoal = [
         id: "bs5",
         tipe: "pg_benar_salah",
         label: "Pilihan Ganda Benar / Salah (Sulit)",
-        pertanyaan: "<b>Pernyataan:</b><br>Lintasan terpendek antara titik $A(3, -2)$ dan titik $B(11, 4)$ pada bidang koordinat Kartesius adalah 10 satuan panjang.",
+        pertanyaan: "<b>Pernyataan:</b>Pengrajin kayu akan membuat hiasan dinding berbentuk segitiga siku-siku dengan salah satu sudutnya adalah 30°. Panjang sisi di depan sudut 30° adalah 60 cm. Panjang hipotenusanya adalah 120 cm.",
         opsi: ["BENAR", "SALAH"],
         jawabanBenar: 0 // BENAR
     },
