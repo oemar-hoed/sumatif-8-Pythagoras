@@ -182,7 +182,7 @@ const bankSoal = [
         id: "ur4",
         tipe: "uraian",
         label: "Soal Uraian (Sulit)",
-        pertanyaan: "Humam, Arjuna, dan Aldo mencoba mengukur lebar sungai. Ilustrasi ditunjukkan melalui gambar di bawah<br><br> <img src='gambar_soal/Uraian2.jpg' style='max-width: 100%; border-radius: 8px;'><br><br>Jika jarak Humam dan Arjuna 6 m, maka lebar sungai tersebut adalah …"
+        pertanyaan: "Humam, Arjuna, dan Aldo mencoba mengukur lebar sungai. Ilustrasi ditunjukkan melalui gambar di bawah<br><br> <img src='gambar_soal/Uraian2.png' style='max-width: 100%; border-radius: 8px;'><br><br>Jika jarak Humam dan Arjuna 6 m, maka lebar sungai tersebut adalah …"
     },
     {
         id: "ur5",
